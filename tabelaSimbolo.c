@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "tabelaSimbolo.h"
 
@@ -39,7 +40,7 @@ void adicionaSimbolo(TabelaSimbolo *ts, char *nome, int ilc) {
 
 	ts->ultimo->prox = aloca(sizeof(TSimbolo));
 	ts->ultimo = ts->ultimo->prox;
-	ts->ultimo->nome = nome;
+	strcpy(ts->ultimo->nome, nome);
 	ts->ultimo->ilc = ilc;
 	ts->ultimo->prox = NULL;
 

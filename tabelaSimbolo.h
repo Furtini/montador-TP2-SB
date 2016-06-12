@@ -10,7 +10,7 @@ typedef struct Simbolo *pSimbolo;
 // Tabela de simbolos.
 typedef struct Simbolo {
 
-	char *nome;
+	char nome[15];
 	int ilc;
 
 	pSimbolo prox;

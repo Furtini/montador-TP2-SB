@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #include "saidaSimples.h"
 #include "tabelaSimbolo.h"
-
 
 // TAD para funções da saida simples do montador.
 
@@ -20,14 +18,13 @@ void passagemUm(FILE *entrada) {
 	char label[15];
 
 	size_t tam = 0;
-	ssize_t read;
 
 	// Cria tabela de simbolos vazia.
 	TabelaSimbolo *tabela = aloca(sizeof(TabelaSimbolo));
 	fazTabelaSimboloVazia(tabela);
 
 	// Leitura do arquivo de entrada.
-	while((read = getline(&buffer, &tam, entrada)) != -1) {
+	while(getline(&buffer, &tam, entrada) != -1) {
 		//printf("%s",buffer);
 
 		// Quebrando buffer em palavras.
