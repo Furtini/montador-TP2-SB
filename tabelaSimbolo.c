@@ -52,7 +52,8 @@ void imprimeTabela(TabelaSimbolo *ts) {
 
 	aux = ts->primeiro->prox;
 
-	printf("Rótulo: Endereço\n\n");
+	printf("Tabela de Simbolos!\n\n");
+	printf("Label: ILC\n");
 	while (aux != NULL) {
 
 		printf("%s: %d \n",aux->nome, aux->ilc);
