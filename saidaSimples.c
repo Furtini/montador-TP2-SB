@@ -22,6 +22,8 @@ void primeiraPassagem(FILE *entrada) {
 	
 	size_t tam = 0;
 
+
+	int i; 
 	tabela = aloca(sizeof(TabelaSimbolo));
 	fazTabelaSimboloVazia(tabela);
 
@@ -32,6 +34,13 @@ void primeiraPassagem(FILE *entrada) {
 		token = strtok(buffer, " :");
 		// Se primeiro nome for label
 		if (token[0] == '_') {
+
+			for (i=0; i < 15; i++) {
+				if (token[i] == '\0') {
+					printf("Achei fim: %d \n",i );
+					break;
+				}
+			}
 			// Adiciona na lista junto com o contador.
 			adicionaSimbolo(tabela, token, counter);
 
@@ -158,16 +167,23 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 
 	char *buffer = NULL;
 	char *token;
-	
+	int i;
 	size_t tam = 0;
 
 	// Leitura do arquivo de entrada.
 	while(getline(&buffer, &tam, entrada) != -1) {
-
+		for (i=0; i < 50; i++) {
+				printf("Caracteres: %c \n",buffer[i] );
+				if (token[i] == '\0') {
+					printf("Achei fim: %d \n",i );
+					break;
+				}
+			}
 		// Quebrando buffer em palavras.
 		token = strtok(buffer, " :");
 		// Se primeiro nome for label
 		if (token[0] == '_') {
+			
 			printf("Label: %s, ILC: %d \n",token, counter);
 
 			token = strtok(NULL, " ");	
@@ -291,8 +307,17 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 10;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ;");
+			token = strtok(NULL, " ");
 			op1 = checaOperando(token);
+			printf("TESTE\n");
+			printf("%d \n", '\n');
+			for (i=0; i < 15; i++) {
+				printf("Caracteres: %c \n",token[i] );
+				if (token[i] == '\0') {
+					printf("Achei fim: %d \n",i );
+					break;
+				}
+			}
 			// Busca ILC do label.
 			if (op1 == 9) {
 				buscaSimbolo(tabela, token);
