@@ -25,7 +25,9 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen("exec.sa", "wb");
 
-		passagemUm(entrada);
+		primeiraPassagem(entrada);
+		rewind(entrada);
+		segundaPassagem(entrada, saida);
 	}
 
 	// Arquivo de entrada + tipo de saida.	
@@ -34,7 +36,9 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen("exec.sa", "wb");
 
-		passagemUm(entrada);
+		primeiraPassagem(entrada);
+		rewind(entrada);
+		segundaPassagem(entrada, saida);
 	}
 
 	// Arquivo de entrada + tipo de saida + arquivo de saida.
@@ -43,7 +47,9 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen(argv[3], "wb");
 
-		passagemUm(entrada);
+		primeiraPassagem(entrada);
+		rewind(entrada);
+		segundaPassagem(entrada, saida);
 	}
 	// Arquivo de entrada + tipo de saida + arquivo de saida + tipo de saida.
 	if (argc == 5){
@@ -51,7 +57,9 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen(argv[3], "wb");
 
-		passagemUm(entrada);
+		primeiraPassagem(entrada);
+		rewind(entrada);
+		segundaPassagem(entrada, saida);
 	}
 	
 

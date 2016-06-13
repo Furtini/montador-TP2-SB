@@ -37,6 +37,9 @@ int testaVazia(TabelaSimbolo ts);
 // Adiciona simbolo no final da lista.
 void adicionaSimbolo(TabelaSimbolo *, char *nome, int ilc);
 
+// Busca por simbolo na tabela e retorna seu ILC.
+int buscaSimbolo(TabelaSimbolo *, char *nome);
+
 // Imprime tabela de simbolo.
 void imprimeTabela(TabelaSimbolo *);
 

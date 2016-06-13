@@ -46,6 +46,28 @@ void adicionaSimbolo(TabelaSimbolo *ts, char *nome, int ilc) {
 
 } // Fim adicionaSimbolo.
 
+
+// Busca por simbolo na tabela e retorna seu ILC.
+int buscaSimbolo(TabelaSimbolo *ts, char *nome) {
+
+	pSimbolo aux;
+
+	aux = ts->primeiro->prox;
+	while (aux != NULL) {
+
+		if (strcmp(nome, aux->nome) == 0) {
+			
+			printf("ILC achado -> %d \n",aux->ilc);
+			return aux->ilc;
+		} else {
+			aux = aux->prox;
+		}
+	}
+	// Caso não encontre simbolo retorno -1
+	printf("ERRO: simbolo nao encontrado!\n");
+	return -1;
+}
+
 // Imprime tabela de simbolo.
 void imprimeTabela(TabelaSimbolo *ts) {
 
