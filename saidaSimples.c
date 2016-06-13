@@ -172,21 +172,15 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 
 	// Leitura do arquivo de entrada.
 	while(getline(&buffer, &tam, entrada) != -1) {
-		for (i=0; i < 50; i++) {
-				printf("Caracteres: %c \n",buffer[i] );
-				if (token[i] == '\0') {
-					printf("Achei fim: %d \n",i );
-					break;
-				}
-			}
+		
 		// Quebrando buffer em palavras.
-		token = strtok(buffer, " :");
+		token = strtok(buffer, " :\n");
 		// Se primeiro nome for label
 		if (token[0] == '_') {
 			
 			printf("Label: %s, ILC: %d \n",token, counter);
 
-			token = strtok(NULL, " ");	
+			token = strtok(NULL, " \n");	
 		} 
 		// Checa qual instrução.
 		if (strcmp(token, "DW") == 0) {
@@ -199,10 +193,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 1;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op2 = checaOperando(token);
 
 		}
@@ -212,10 +206,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 2;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op2 = checaOperando(token);
 
 		}
@@ -225,10 +219,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 3;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op2 = checaOperando(token);
 
 		}
@@ -238,7 +232,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 4;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
@@ -248,7 +242,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 4;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
@@ -258,10 +252,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 6;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op2 = checaOperando(token);
 
 		}
@@ -271,7 +265,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 7;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
@@ -281,10 +275,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 8;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op2 = checaOperando(token);
 
 		}
@@ -294,10 +288,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 9;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op2 = checaOperando(token);
 
 		}
@@ -307,12 +301,12 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 10;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ");
+			token = strtok(NULL, " \n");
 			op1 = checaOperando(token);
 			printf("TESTE\n");
 			printf("%d \n", '\n');
 			for (i=0; i < 15; i++) {
-				printf("Caracteres: %c \n",token[i] );
+				printf("Caracteres[%d]: %c \n",i, token[i] );
 				if (token[i] == '\0') {
 					printf("Achei fim: %d \n",i );
 					break;
@@ -330,7 +324,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 11;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ;");
+			token = strtok(NULL, " ;\n");
 			op1 = checaOperando(token);
 			// Busca ILC do label.
 			if (op1 == 9) {
@@ -344,7 +338,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 12;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ;");
+			token = strtok(NULL, " ;\n");
 			op1 = checaOperando(token);
 			// Busca ILC do label.
 			if (op1 == 9) {
@@ -358,7 +352,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 13;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
@@ -375,7 +369,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 15;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
@@ -385,7 +379,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 16;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
@@ -402,7 +396,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 18;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
@@ -412,7 +406,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 19;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,");
+			token = strtok(NULL, " ,\n");
 			op1 = checaOperando(token);
 
 		}
