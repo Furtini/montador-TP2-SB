@@ -1,8 +1,8 @@
 ################# Makefile ####################
 CC=gcc
 CFLAGS=-I.
-DEPS = saidaSimples.h
-OBJ = montador.o saidaSimples.o
+DEPS = saidaSimples.h tabelaSimbolo.h
+OBJ = montador.o saidaSimples.o tabelaSimbolo.o
 
 all: montador
 

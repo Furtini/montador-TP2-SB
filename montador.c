@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "saidaSimples.h"
+#include "tradutor.h"
 
 // arg[1] -> arquivo entrada 			: saida = exec.sa
 // arg[2] -> saida simples ou verbose	: saida = exec.sa (opcional)

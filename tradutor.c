@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "saidaSimples.h"
+#include "tradutor.h"
 #include "tabelaSimbolo.h"
 
 // TAD para funções da saida simples do montador.
@@ -10,20 +10,16 @@
 // Cria tabela de simbolos vazia GLOBAL.
 TabelaSimbolo *tabela;
 
-
 // Função para execução do montador simples.
 void primeiraPassagem(FILE *entrada) {
 
 	int counter = 0;
-	int opcode = 0;
 
 	char *buffer = NULL;
 	char *token;
 	
 	size_t tam = 0;
 
-
-	int i; 
 	tabela = aloca(sizeof(TabelaSimbolo));
 	fazTabelaSimboloVazia(tabela);
 
@@ -31,20 +27,14 @@ void primeiraPassagem(FILE *entrada) {
 	while(getline(&buffer, &tam, entrada) != -1) {
 
 		// Quebrando buffer em palavras.
-		token = strtok(buffer, " :");
+		token = strtok(buffer, " :\r");
 		// Se primeiro nome for label
 		if (token[0] == '_') {
 
-			for (i=0; i < 15; i++) {
-				if (token[i] == '\0') {
-					printf("Achei fim: %d \n",i );
-					break;
-				}
-			}
 			// Adiciona na lista junto com o contador.
 			adicionaSimbolo(tabela, token, counter);
 
-			token = strtok(NULL, " ");	
+			token = strtok(NULL, " \r");	
 		} 
 		// Checa qual instrução.
 		if (strcmp(token, "DW") == 0) {
@@ -52,103 +42,63 @@ void primeiraPassagem(FILE *entrada) {
 
 		}
 		if (strcmp(token, "MOV") == 0) {
-			//printf("%s\n",token);
-			opcode = 1;
 			counter += 6;
 		}
 		if (strcmp(token, "ADD") == 0) {
-			//printf("%s\n",token);
-			opcode = 2;
 			counter += 6;
 		}
 		if (strcmp(token, "SUB") == 0) {
-			//printf("%s\n",token);
-			opcode = 3;
 			counter += 6;
 		}
 		if (strcmp(token, "MUL") == 0) {
-			//printf("%s\n",token);
-			opcode = 4;
 			counter += 4;
 		}
 		if (strcmp(token, "DIV") == 0) {
-			//printf("%s\n",token);
-			opcode = 4;
 			counter += 4;
 		}
 		if (strcmp(token, "AND") == 0) {
-			//printf("%s\n",token);
-			opcode = 6;
 			counter += 6;
 		}
 		if (strcmp(token, "NOT") == 0) {
-			//printf("%s\n",token);
-			opcode = 7;
 			counter += 4;
 		}
 		if (strcmp(token, "OR") == 0) {
-			//printf("%s\n",token);
-			opcode = 8;
 			counter += 6;
 		}
 		if (strcmp(token, "CMP") == 0) {
-			//printf("%s\n",token);
-			opcode = 9;
 			counter += 6;
 		}
 		if (strcmp(token, "JMP") == 0) {
-			//printf("%s\n",token);
-			opcode = 10;
 			counter += 4;
 		}
 		if (strcmp(token, "JZ") == 0) {
-			//printf("%s\n",token);
-			opcode = 11;
 			counter += 4;
 		}
 		if (strcmp(token, "JS") == 0) {
-			//printf("%s\n",token);
-			opcode = 12;
 			counter += 4;
 		}
 		if (strcmp(token, "CALL") == 0) {
-			//printf("%s\n",token);
-			opcode = 13;
 			counter += 4;
 		}
 		if (strcmp(token, "RET") == 0) {
-			//printf("%s\n",token);
-			opcode = 14;
 			counter += 2;
 		}
 		if (strcmp(token, "PUSH") == 0) {
-			//printf("%s\n",token);
-			opcode = 15;
 			counter += 4;
 		}
 		if (strcmp(token, "POP") == 0) {
-			//printf("%s\n",token);
-			opcode = 16;
 			counter += 4;
 		}
 		if (strcmp(token, "DUMP") == 0) {
-			//printf("%s\n",token);
-			opcode = 17;
 			counter += 2;
 		}
 		if (strcmp(token, "READ") == 0) {
-			//printf("%s\n",token);
-			opcode = 18;
 			counter += 4;
 		}
 		if (strcmp(token, "WRITE") == 0) {
-			//printf("%s\n",token);
-			opcode = 19;
 			counter += 4;
 		}
 		if (strcmp(token, "HLT") == 0) {
-			//printf("%s\n",token);
-			opcode = 20;
 			counter += 2;
 		}
 	}
@@ -167,20 +117,20 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 
 	char *buffer = NULL;
 	char *token;
-	int i;
+
 	size_t tam = 0;
 
 	// Leitura do arquivo de entrada.
 	while(getline(&buffer, &tam, entrada) != -1) {
 		
 		// Quebrando buffer em palavras.
-		token = strtok(buffer, " :\n");
+		token = strtok(buffer, " :\n\r");
 		// Se primeiro nome for label
 		if (token[0] == '_') {
 			
 			printf("Label: %s, ILC: %d \n",token, counter);
 
-			token = strtok(NULL, " \n");	
+			token = strtok(NULL, " \n\r");	
 		} 
 		// Checa qual instrução.
 		if (strcmp(token, "DW") == 0) {
@@ -193,12 +143,16 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 1;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op2 = checaOperando(token);
 
+			codigoDoisOperandos(op1, op2);
+
+			printf("Operando 1: %d \n", op1);
+			printf("Operando 2: %d \n", op2);
 		}
 		if (strcmp(token, "ADD") == 0) {
 			// Dois operandos.
@@ -206,11 +160,16 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 2;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op2 = checaOperando(token);
+
+			codigoDoisOperandos(op1, op2);
+
+			printf("Operando 1: %d \n", op1);
+			printf("Operando 2: %d \n", op2);
 
 		}
 		if (strcmp(token, "SUB") == 0) {
@@ -219,11 +178,16 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 3;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op2 = checaOperando(token);
+
+			codigoDoisOperandos(op1, op2);
+
+			printf("Operando 1: %d \n", op1);
+			printf("Operando 2: %d \n", op2);
 
 		}
 		if (strcmp(token, "MUL") == 0) {
@@ -232,8 +196,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 4;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "DIV") == 0) {
@@ -242,8 +208,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 4;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "AND") == 0) {
@@ -252,11 +220,16 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 6;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op2 = checaOperando(token);
+
+			codigoDoisOperandos(op1, op2);
+
+			printf("Operando 1: %d \n", op1);
+			printf("Operando 2: %d \n", op2);
 
 		}
 		if (strcmp(token, "NOT") == 0) {
@@ -265,8 +238,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 7;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "OR") == 0) {
@@ -275,11 +250,16 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 8;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op2 = checaOperando(token);
+
+			codigoDoisOperandos(op1, op2);
+
+			printf("Operando 1: %d \n", op1);
+			printf("Operando 2: %d \n", op2);
 
 		}
 		if (strcmp(token, "CMP") == 0) {
@@ -288,11 +268,16 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 9;
 			counter += 6;
 			// Lendo operando 1 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op2 = checaOperando(token);
+
+			codigoDoisOperandos(op1, op2);
+
+			printf("Operando 1: %d \n", op1);
+			printf("Operando 2: %d \n", op2);
 
 		}
 		if (strcmp(token, "JMP") == 0) {
@@ -301,21 +286,14 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 10;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " \n");
+			token = strtok(NULL, " \r\n");
 			op1 = checaOperando(token);
-			printf("TESTE\n");
-			printf("%d \n", '\n');
-			for (i=0; i < 15; i++) {
-				printf("Caracteres[%d]: %c \n",i, token[i] );
-				if (token[i] == '\0') {
-					printf("Achei fim: %d \n",i );
-					break;
-				}
-			}
 			// Busca ILC do label.
 			if (op1 == 9) {
-				buscaSimbolo(tabela, token);
+				op1 = buscaSimbolo(tabela, token);
 			}
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "JZ") == 0) {
@@ -324,12 +302,14 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 11;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ;\n");
+			token = strtok(NULL, " ;\r\n");
 			op1 = checaOperando(token);
 			// Busca ILC do label.
 			if (op1 == 9) {
-				buscaSimbolo(tabela, token);
+				op1 = buscaSimbolo(tabela, token);
 			}
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "JS") == 0) {
@@ -338,12 +318,14 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 12;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ;\n");
+			token = strtok(NULL, " ;\r\n");
 			op1 = checaOperando(token);
 			// Busca ILC do label.
 			if (op1 == 9) {
-				buscaSimbolo(tabela, token);
+				op1 = buscaSimbolo(tabela, token);
 			}
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "CALL") == 0) {
@@ -352,8 +334,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 13;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "RET") == 0) {
@@ -369,8 +353,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 15;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "POP") == 0) {
@@ -379,8 +365,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 16;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "DUMP") == 0) {
@@ -396,8 +384,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 18;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "WRITE") == 0) {
@@ -406,8 +396,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			opcode = 19;
 			counter += 4;
 			// Lendo operando da instrução.
-			token = strtok(NULL, " ,\n");
+			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
+
+			printf("Operando 1: %d \n", op1);
 
 		}
 		if (strcmp(token, "HLT") == 0) {
@@ -470,4 +462,90 @@ static int checaOperando(char *op) {
 
 	printf("ERRO: operando invalido!\n");
 	return -1;
+}
+
+
+// Retorna qual o codigo quando instrução usa 2 operandos.
+static int codigoDoisOperandos(int op1, int op2) {
+	
+	int  tipo1, tipo2;
+
+	// Se operando 1 entre 0-8 é um registrador (tipo1 = 0).
+	// Se forem 9 é um label (tipo1 = 1);
+	// Se forem 10 é um imediato (tipo1 = 2).
+	switch (op1) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+			tipo1 = 0;
+			break;
+		case 9:
+			tipo1 = 1;
+			break;
+		case 10:
+			tipo1 = 2;
+			break;
+		default:
+			printf("ERRO: codigo operando errado!\n");
+			break;
+	}
+	// Se operando 2 entre 0-8 é um registrador (tipo2 = 0).
+	// Se forem 9 é um label (tipo2 = 0);
+	// Se forem 10 é um imediato (tipo2 = 0).
+	switch (op2) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+			tipo2 = 0;
+			break;
+		case 9:
+			tipo2 = 1;
+			break;
+		case 10:
+			tipo2 = 2;
+			break;
+		default:
+			printf("ERRO: codigo operando errado!\n");
+			break;
+	}
+
+	// Encontra o codigo do par de operandos.
+	
+	// Registrador e memoria
+	if (tipo1 == 0 && tipo2 == 1) {
+		printf("Registrador e memoria!\n");
+		return 3;
+	}
+	// Memoria e registrador.
+	if (tipo1 == 1 && tipo2 == 0) {
+		printf("Memoria e registrador!\n");
+		return 4;
+	}
+	//Registrador e registrador.
+	if (tipo1 == 0 && tipo2 == 0) {
+		printf("Registrador e registrador!\n");
+		return 5;
+	}
+	//Memoria e imediato.
+	if (tipo1 == 1 && tipo2 == 2) {
+		printf("Memoria e imediato!\n");
+		return 6;
+	}
+	// Registrador e imediato.
+	if (tipo1 == 0 && tipo2 == 2) {
+		printf("Registrador e imediato!\n");
+		return 7;
+	}
 }
