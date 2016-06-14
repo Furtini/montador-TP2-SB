@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "tabelaSimbolo.h"
 #include "tradutor.h"
 
 // arg[1] -> arquivo entrada 			: saida = exec.sa
@@ -16,6 +17,10 @@ int main(int argc, char const *argv[]) {
 	
 	FILE *entrada = NULL;
 	FILE *saida = NULL;
+
+	// Cria tabela de simbolos vazia.
+	TabelaSimbolo *tabela = aloca(sizeof(TabelaSimbolo));
+	fazTabelaSimboloVazia(tabela);
 
 	// Abre o arquivo de entrada para leitura.
 	entrada = fopen(argv[1], "r");
@@ -31,9 +36,9 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen("exec.sa", "wb");
 
-		primeiraPassagem(entrada);
+		primeiraPassagem(entrada, tabela);
 		rewind(entrada);
-		segundaPassagem(entrada, saida);
+		segundaPassagem(entrada, saida, tabela);
 	}
 
 	// Arquivo de entrada + tipo de saida.	
@@ -42,9 +47,12 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen("exec.sa", "wb");
 
-		primeiraPassagem(entrada);
+		primeiraPassagem(entrada, tabela);
 		rewind(entrada);
-		segundaPassagem(entrada, saida);
+		segundaPassagem(entrada, saida, tabela);
+		if (strcmp(argv[2], "-v") == 0) {
+			imprimeTabela(tabela);
+		}
 	}
 
 	// Arquivo de entrada + tipo de saida + arquivo de saida.
@@ -53,9 +61,12 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen(argv[3], "wb");
 
-		primeiraPassagem(entrada);
+		primeiraPassagem(entrada, tabela);
 		rewind(entrada);
-		segundaPassagem(entrada, saida);
+		segundaPassagem(entrada, saida, tabela);
+		if (strcmp(argv[2], "-v") == 0) {
+			imprimeTabela(tabela);
+		}
 	}
 	// Arquivo de entrada + tipo de saida + arquivo de saida + tipo de saida.
 	if (argc == 5){
@@ -63,12 +74,13 @@ int main(int argc, char const *argv[]) {
 		// Abre arquivo de escrita como nome dado.
 		saida = fopen(argv[3], "wb");
 
-		primeiraPassagem(entrada);
+		primeiraPassagem(entrada, tabela);
 		rewind(entrada);
-		segundaPassagem(entrada, saida);
+		segundaPassagem(entrada, saida, tabela);
+		if (strcmp(argv[4], "-v") == 0) {
+			imprimeTabela(tabela);
+		}
 	}
-	
-
 
 	fclose(entrada);
 	fclose(saida);

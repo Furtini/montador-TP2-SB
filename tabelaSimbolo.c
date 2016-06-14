@@ -54,7 +54,7 @@ void adicionaSimbolo(TabelaSimbolo *ts, char *nome, int ilc) {
 
 
 // Busca por simbolo na tabela e retorna seu ILC.
-int buscaSimbolo(TabelaSimbolo *ts, char *nome) {
+short buscaSimbolo(TabelaSimbolo *ts, char *nome) {
 
 	pSimbolo aux;
 
@@ -63,7 +63,7 @@ int buscaSimbolo(TabelaSimbolo *ts, char *nome) {
 
 		if (strcmp(nome, aux->nome) == 0) {
 			
-			printf("ILC achado -> %d \n",aux->ilc);
+			printf("Simbolo achado: %s, ILC: %d \n", aux->nome, aux->ilc);
 			return aux->ilc;
 		} else {
 			aux = aux->prox;
@@ -74,14 +74,35 @@ int buscaSimbolo(TabelaSimbolo *ts, char *nome) {
 	return -1;
 }
 
+// Atualiza o ilc das variaveis na tabela de simbolo para o endereço delas.
+void atualizaVariaveis(TabelaSimbolo *ts, short counter) {
+
+	pSimbolo aux;
+
+	aux = ts->primeiro->prox;
+
+	while (aux != NULL) {
+		// Se nome simbolo for label, avança na tabela.
+		if (aux->nome[0] == '_') {
+			aux = aux->prox;
+		} 
+		// Caso seja variavel, ILC se torna endereço das posições de mem logo após instruções.
+		else {
+			aux->ilc = counter + 2;
+			counter += 2;
+			aux = aux->prox;
+		}
+	}
+}
+
 // Imprime tabela de simbolo.
 void imprimeTabela(TabelaSimbolo *ts) {
 
 	pSimbolo aux;
 
 	aux = ts->primeiro->prox;
-
-	printf("Tabela de Simbolos!\n\n");
+	printf("-------------------\n");
+	printf("Tabela de Simbolos!\n");
 	printf("Label: ILC\n");
 	while (aux != NULL) {
 
@@ -89,4 +110,5 @@ void imprimeTabela(TabelaSimbolo *ts) {
 
 		aux = aux->prox;
 	}
+	printf("-------------------\n");
 } // Fim imprimeTabela.

@@ -17,7 +17,7 @@ typedef struct Simbolo *pSimbolo;
 typedef struct Simbolo {
 
 	char nome[15];
-	int ilc;
+	short ilc;
 
 	pSimbolo prox;
 
@@ -44,7 +44,10 @@ int testaVazia(TabelaSimbolo ts);
 void adicionaSimbolo(TabelaSimbolo *, char *nome, int ilc);
 
 // Busca por simbolo na tabela e retorna seu ILC.
-int buscaSimbolo(TabelaSimbolo *, char *nome);
+short buscaSimbolo(TabelaSimbolo *, char *nome);
+
+// Atualiza o ilc das variaveis na tabela de simbolo para o endereço delas.
+void atualizaVariaveis(TabelaSimbolo *, short counter);
 
 // Imprime tabela de simbolo.
 void imprimeTabela(TabelaSimbolo *);

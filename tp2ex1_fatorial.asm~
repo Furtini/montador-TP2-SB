@@ -1,7 +1,9 @@
 READ BX ;Número que será fatorado
+DW teste ;teste
 JZ _zero ;Caso o valor entrado seja igual a zero
 MOV AX, BX ;AX receberá o resultado.
-_loop: SUB BX, 0xF ;Decrementa o valor de BX
+_loop: SUB BX, 0x1 ;Decrementa o valor de BX
+DW teste2 ;teste
 JZ _exit ;Quando BX chegar a zero, desvia para o final
 MUL BX ;AX receberá o resultado da multiplicação AX x BX
 JMP _loop
