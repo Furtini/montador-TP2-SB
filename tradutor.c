@@ -1,3 +1,9 @@
+// Universidade Federal de Minas Gerais
+// Software Basico - Trabalho Pratico 2
+// Montador
+// Lucas Furtini Veado - 2013007609
+// Edson Roteia Araujo Junior - 2014004174
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,10 +16,12 @@
 // Cria tabela de simbolos vazia GLOBAL.
 TabelaSimbolo *tabela;
 
+int counter;
+
 // Função para execução do montador simples.
 void primeiraPassagem(FILE *entrada) {
 
-	int counter = 0;
+	counter = 0;
 
 	char *buffer = NULL;
 	char *token;
@@ -108,6 +116,8 @@ void primeiraPassagem(FILE *entrada) {
 			counter += 2;
 		}
 	}
+	// TODO: atualizar ILC das variaveis para as proximas posições da memoria.
+
 	printf("-------------------------------\n");
 	printf("Contador: %d\n",counter );
 	imprimeTabela(tabela);
@@ -119,6 +129,7 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 
 	unsigned int temp;
 	
+	unsigned short ipInicial = 0;
 	unsigned short opcode, codigo; // Devem ser 1 byte cada.
 	unsigned short op1, op2; 	   // Devem ser 1 byte cada.
 
@@ -126,6 +137,12 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 	char *token;
 
 	size_t tam = 0;
+
+	// Escreve inicio do IP.
+	fputc(ipInicial, saida);
+
+	// TODO:  buscar variavel na tabela de simbolo e atualizar seu endereço.
+
 
 	// Leitura do arquivo de entrada.
 	while(getline(&buffer, &tam, entrada) != -1) {
@@ -147,10 +164,13 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			token = strtok(NULL, " \n\r");
 		}
 		if (strcmp(token, "MOV") == 0) {
-			printf("%s\n",token);
+			printf("%s : ",token);
 			opcode = 1;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Dois Operandos
-			// Lendo operando 1 da instrução.
+			// Lendo operando 1	 da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
 			// Lendo operando 2 da instrução.
@@ -165,13 +185,16 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			}
 			op2 = temp;
 
-			printf("Operando 1: %d \n", op1);
-			printf("Operando 2: %d \n", op2);
+			printf("Op1: %d, ", op1);
+			printf("Op2: %d \n", op2);
 		}
 		if (strcmp(token, "ADD") == 0) {
 			// Dois operandos.
 			printf("%s\n",token);
 			opcode = 2;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando 1 da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -195,6 +218,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Dois operandos.
 			printf("%s\n",token);
 			opcode = 3;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando 1 da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -218,6 +244,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 4;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -230,7 +259,10 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 		if (strcmp(token, "DIV") == 0) {
 			// Um operando.
 			printf("%s\n",token);
-			opcode = 4;
+			opcode = 5;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -244,6 +276,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Dois operandos.
 			printf("%s\n",token);
 			opcode = 6;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando 1 da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -267,6 +302,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 7;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -280,6 +318,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Dois operandos.
 			printf("%s\n",token);
 			opcode = 8;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando 1 da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -303,6 +344,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Dois operandos.
 			printf("%s\n",token);
 			opcode = 9;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando 1 da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -326,6 +370,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 10;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " \r\n");
 			op1 = checaOperando(token);
@@ -344,6 +391,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 11;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ;\r\n");
 			op1 = checaOperando(token);
@@ -362,6 +412,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 12;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ;\r\n");
 			op1 = checaOperando(token);
@@ -380,6 +433,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 13;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -394,12 +450,17 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Nenhum operando.
 			printf("%s\n",token);
 			opcode = 14;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
 
 		}
 		if (strcmp(token, "PUSH") == 0) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 15;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			// Confere qual o operando.
@@ -422,6 +483,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 16;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -435,12 +499,17 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Nenhum operando.
 			printf("%s\n",token);
 			opcode = 17;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
 
 		}
 		if (strcmp(token, "READ") == 0) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 18;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -454,6 +523,9 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 19;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
+
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -467,6 +539,8 @@ void segundaPassagem(FILE *entrada, FILE *saida) {
 			// Nenhum operando.
 			printf("%s\n",token);
 			opcode = 20;
+			// Escreve opcode da instrução.
+			fputc(opcode, saida);
 
 		}
 	}
@@ -588,8 +662,8 @@ static short codigoDoisOperandos(short op1, short op2) {
 			break;
 	}
 	// Se operando 2 entre 0-8 é um registrador (tipo2 = 0).
-	// Se forem 9 é um label (tipo2 = 0);
-	// Se forem 10 é um imediato (tipo2 = 0).
+	// Se forem 9 é um label (tipo2 = 1);
+	// Se forem 10 é um imediato (tipo2 = 2).
 	switch (op2) {
 		case 0:
 		case 1:
