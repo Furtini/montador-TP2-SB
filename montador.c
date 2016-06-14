@@ -1,3 +1,9 @@
+// Universidade Federal de Minas Gerais
+// Software Basico - Trabalho Pratico 2
+// Montador
+// Lucas Furtini Veado - 2013007609
+// Edson Roteia Araujo Junior - 2014004174
+
 #include <stdio.h>
 #include <stdlib.h>
 
