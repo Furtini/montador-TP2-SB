@@ -30,19 +30,17 @@ void primeiraPassagem(FILE *entrada,  TabelaSimbolo *tabela) {
 	while(getline(&buffer, &tam, entrada) != -1) {
 
 		// Quebrando buffer em palavras.
-		token = strtok(buffer, " :\r");
+		token = strtok(buffer, " :\r\n");
 		// Se primeiro nome for label
 		if (token[0] == '_') {
 
 			// Adiciona na lista junto com o contador.
 			adicionaSimbolo(tabela, token, counter);
+			token = strtok(NULL, " :\r\n");	
 
-			token = strtok(NULL, " \r");	
 		} 
 		// Checa qual instrução.
 		if (strcmp(token, "DW") == 0) {
-			printf("%s\n",token);
-
 			// Busca variavel e adiciona na tabela de simbolo.
 			token = strtok(NULL, " \r\n");	
 			adicionaSimbolo(tabela, token, counter);
@@ -109,7 +107,7 @@ void primeiraPassagem(FILE *entrada,  TabelaSimbolo *tabela) {
 			counter += 1;
 		}
 	}
-
+	//printf("COUNTER: %d\n",counter );
 	atualizaVariaveis(tabela, counter);
 }
 
