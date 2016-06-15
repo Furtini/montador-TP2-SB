@@ -10,9 +10,6 @@
 #include "tabelaSimbolo.h"
 #include "tradutor.h"
 
-// arg[1] -> arquivo entrada 			: saida = exec.sa
-// arg[2] -> saida simples ou verbose	: saida = exec.sa (opcional)
-// arq[3] -> nome do arquivo de saida	: saida = argv[3] (opcional)
 int main(int argc, char const *argv[]) {
 	
 	FILE *entrada = NULL;

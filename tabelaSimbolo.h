@@ -49,6 +49,9 @@ short buscaSimbolo(TabelaSimbolo *, char *nome);
 // Atualiza o ilc das variaveis na tabela de simbolo para o endereço delas.
 void atualizaVariaveis(TabelaSimbolo *, short counter);
 
+// Libera tabela de simbolos da memoria.
+void liberaTabela(TabelaSimbolo *);
+
 // Imprime tabela de simbolo.
 void imprimeTabela(TabelaSimbolo *);
 
