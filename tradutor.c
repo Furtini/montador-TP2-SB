@@ -120,7 +120,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 	
 	int8_t opcode, codigo; // Devem ser 1 byte cada.
 	
-	unsigned short ipInicial = 0;
+	unsigned short ipInicial = 10;
 	unsigned short op1, op2; 	   // Devem ser 2 byte cada.
 	unsigned short aux1, aux2;
 
