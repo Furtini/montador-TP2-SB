@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include "tradutor.h"
 #include "tabelaSimbolo.h"
@@ -117,9 +118,10 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 	unsigned int temp;
 	
-	unsigned int ipInicial = 0;
-	unsigned short opcode, codigo; // Devem ser 1 byte cada.
-	unsigned short op1, op2; 	   // Devem ser 1 byte cada.
+	int8_t opcode, codigo; // Devem ser 1 byte cada.
+	
+	unsigned short ipInicial = 0;
+	unsigned short op1, op2; 	   // Devem ser 2 byte cada.
 	unsigned short aux1, aux2;
 
 	char *buffer = NULL;
@@ -129,7 +131,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 	// Escreve inicio do IP.
 	fputc(ipInicial, saida);
-
+	fputc(ipInicial, saida);
 	// TODO:  buscar variavel na tabela de simbolo e atualizar seu endereço.
 
 
@@ -141,7 +143,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 		// Se primeiro nome for label
 		if (token[0] == '_') {
 			
-			printf("Label: %s ->",token);
+			printf("Label: %s\n",token);
 			// Pula o label.
 			token = strtok(NULL, " \n\r");	
 		} 
@@ -153,12 +155,11 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			token = strtok(NULL, " \n\r");
 		}
 		if (strcmp(token, "MOV") == 0) {
-			printf("%s : ",token);
+			printf("%s \n",token);
 			opcode = 1;
 			// Escreve opcode da instrução.
 			fputc(opcode, saida);
 
-			// Dois Operandos
 			// Lendo operando 1	 da instrução.
 			token = strtok(NULL, " ,\r\n");
 			op1 = checaOperando(token);
@@ -197,8 +198,8 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			fputc(op1, saida);
 			fputc(op2, saida);
 
-			printf("Op1: %d, ", op1);
-			printf("Op2: %d \n", op2);
+			printf("Operando 1: %d \n", op1);
+			printf("Operando 2: %d \n", op2);
 		}
 		if (strcmp(token, "ADD") == 0) {
 			// Dois operandos.
@@ -535,11 +536,8 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			// Escreve codigo no arquivo.
 			fputc(codigo, saida);
 
-			// Busca endereço do op1 caso seja simbolo.
-			if (op1 == 11) {
-				op1 = buscaSimbolo(tabela, token);
-			}
-
+			op1 = buscaSimbolo(tabela, token);
+			
 			// Escreve operando no arquivo.
 			fputc(op1, saida);
 
@@ -560,10 +558,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			// Escreve codigo no arquivo.
 			fputc(codigo, saida);
 
-			// Busca endereço do op1 caso seja simbolo.
-			if (op1 == 11) {
-				op1 = buscaSimbolo(tabela, token);
-			}
+			op1 = buscaSimbolo(tabela, token);	
 
 			// Escreve operando no arquivo.
 			fputc(op1, saida);
@@ -585,11 +580,8 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			// Escreve codigo no arquivo.
 			fputc(codigo, saida);
 
-			// Busca endereço do op1 caso seja simbolo.
-			if (op1 == 11) {
-				op1 = buscaSimbolo(tabela, token);
-			}
-
+			op1 = buscaSimbolo(tabela, token);
+			
 			// Escreve operando no arquivo.
 			fputc(op1, saida);
 
@@ -610,11 +602,8 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			// Escreve codigo no arquivo.
 			fputc(codigo, saida);
 
-			// Busca endereço do op1 caso seja simbolo.
-			if (op1 == 11) {
-				op1 = buscaSimbolo(tabela, token);
-			}
-
+			op1 = buscaSimbolo(tabela, token);
+			
 			// Escreve operando no arquivo.
 			fputc(op1, saida);
 
@@ -800,7 +789,7 @@ static short checaOperando(char *op) {
 }
 
 // Retorna qual o codigo quando isntrução usa 1 operando.
-static short codigoUmOperando(short op1) {
+static short codigoUmOperando(unsigned short op1) {
 
 	switch (op1) {
 		// Regs
@@ -830,7 +819,7 @@ static short codigoUmOperando(short op1) {
 }
 
 // Retorna qual o codigo quando instrução usa 2 operandos.
-static short codigoDoisOperandos(short op1, short op2) {
+static short codigoDoisOperandos(unsigned short op1, unsigned short op2) {
 	
 	short  tipo1, tipo2;
 
