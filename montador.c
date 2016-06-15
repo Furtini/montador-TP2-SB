@@ -82,6 +82,9 @@ int main(int argc, char const *argv[]) {
 		}
 	}
 
+	// Libera estruturas e fecha arquivos.
+	liberaTabela(tabela);
+	free(tabela);
 	fclose(entrada);
 	fclose(saida);
 	return 0;

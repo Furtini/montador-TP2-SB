@@ -62,8 +62,6 @@ short buscaSimbolo(TabelaSimbolo *ts, char *nome) {
 	while (aux != NULL) {
 
 		if (strcmp(nome, aux->nome) == 0) {
-			
-			printf("Simbolo achado: %s, ILC: %d \n", aux->nome, aux->ilc);
 			return aux->ilc;
 		} else {
 			aux = aux->prox;
@@ -92,6 +90,25 @@ void atualizaVariaveis(TabelaSimbolo *ts, short counter) {
 			counter += 2;
 			aux = aux->prox;
 		}
+	}
+}
+
+// Libera tabela de simbolos da memoria.
+void liberaTabela(TabelaSimbolo *ts) {
+
+	pSimbolo aux, p, q;
+
+	aux = ts->primeiro->prox;
+	while (aux != NULL) {
+		p = ts->primeiro;
+		q = ts->primeiro->prox;
+
+		p->prox = q->prox;
+		if (p->prox == NULL) {
+			ts->ultimo = p;
+		}
+		free(q);
+		aux = aux->prox;
 	}
 }
 

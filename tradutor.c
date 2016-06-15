@@ -14,7 +14,7 @@
 
 // TAD para funções da saida simples do montador.
 
-int counter;
+static int counter;
 
 // Função para execução do montador simples.
 void primeiraPassagem(FILE *entrada,  TabelaSimbolo *tabela) {
@@ -49,64 +49,64 @@ void primeiraPassagem(FILE *entrada,  TabelaSimbolo *tabela) {
 
 		}
 		if (strcmp(token, "MOV") == 0) {
-			counter += 6;
+			counter += 3;
 		}
 		if (strcmp(token, "ADD") == 0) {
-			counter += 6;
+			counter += 3;
 		}
 		if (strcmp(token, "SUB") == 0) {
-			counter += 6;
+			counter += 3;
 		}
 		if (strcmp(token, "MUL") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "DIV") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "AND") == 0) {
-			counter += 6;
+			counter += 3;
 		}
 		if (strcmp(token, "NOT") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "OR") == 0) {
-			counter += 6;
+			counter += 3;
 		}
 		if (strcmp(token, "CMP") == 0) {
-			counter += 6;
+			counter += 3;
 		}
 		if (strcmp(token, "JMP") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "JZ") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "JS") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "CALL") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "RET") == 0) {
-			counter += 2;
+			counter += 1;
 		}
 		if (strcmp(token, "PUSH") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "POP") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "DUMP") == 0) {
-			counter += 2;
+			counter += 1;
 		}
 		if (strcmp(token, "READ") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "WRITE") == 0) {
-			counter += 4;
+			counter += 2;
 		}
 		if (strcmp(token, "HLT") == 0) {
-			counter += 2;
+			counter += 1;
 		}
 	}
 
@@ -130,8 +130,8 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 	size_t tam = 0;
 
 	// Escreve inicio do IP.
-	fputc(ipInicial, saida);
-	fputc(ipInicial, saida);
+	fwrite(&ipInicial, 2, 1, saida);
+
 	// TODO:  buscar variavel na tabela de simbolo e atualizar seu endereço.
 
 
@@ -142,23 +142,18 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 		token = strtok(buffer, " :\n\r");
 		// Se primeiro nome for label
 		if (token[0] == '_') {
-			
-			printf("Label: %s\n",token);
 			// Pula o label.
 			token = strtok(NULL, " \n\r");	
 		} 
 		// Checa qual instrução.
 		if (strcmp(token, "DW") == 0) {
-			printf("%s\n",token);
-
 			// Pula o label.
 			token = strtok(NULL, " \n\r");
 		}
 		if (strcmp(token, "MOV") == 0) {
-			printf("%s \n",token);
 			opcode = 1;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando 1	 da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -178,7 +173,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			
 			codigo = codigoDoisOperandos(op1, op2);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Muda op2 para hexa caso imediato.
 			if (op2 == 10) {
@@ -195,18 +190,13 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operandos na saida.
-			fputc(op1, saida);
-			fputc(op2, saida);
-
-			printf("Operando 1: %d \n", op1);
-			printf("Operando 2: %d \n", op2);
+			fwrite(&op1, 2, 1, saida);
+			fwrite(&op2, 2, 1, saida);
 		}
 		if (strcmp(token, "ADD") == 0) {
-			// Dois operandos.
-			printf("%s\n",token);
 			opcode = 2;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Dois Operandos
 			// Lendo operando 1	 da instrução.
@@ -227,7 +217,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			
 			codigo = codigoDoisOperandos(op1, op2);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Muda op2 para hexa caso imediato.
 			if (op2 == 10) {
@@ -244,18 +234,13 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operandos na saida.
-			fputc(op1, saida);
-			fputc(op2, saida);
-
-			printf("Operando 1: %d \n", op1);
-			printf("Operando 2: %d \n", op2);
+			fwrite(&op1, 2, 1, saida);
+			fwrite(&op2, 2, 1, saida);
 		}
 		if (strcmp(token, "SUB") == 0) {
-			// Dois operandos.
-			printf("%s\n",token);
 			opcode = 3;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Dois Operandos
 			// Lendo operando 1	 da instrução.
@@ -276,7 +261,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			
 			codigo = codigoDoisOperandos(op1, op2);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Muda op2 para hexa caso imediato.
 			if (op2 == 10) {
@@ -293,18 +278,13 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operandos na saida.
-			fputc(op1, saida);
-			fputc(op2, saida);
-
-			printf("Operando 1: %d \n", op1);
-			printf("Operando 2: %d \n", op2);
+			fwrite(&op1, 2, 1, saida);
+			fwrite(&op2, 2, 1, saida);
 		}
 		if (strcmp(token, "MUL") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 4;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -312,7 +292,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Busca endereço do op1 caso seja simbolo.
 			if (op1 == 11) {
@@ -320,16 +300,12 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "DIV") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 5;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -337,7 +313,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Busca endereço do op1 caso seja simbolo.
 			if (op1 == 11) {
@@ -345,16 +321,12 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "AND") == 0) {
-			// Dois operandos.
-			printf("%s\n",token);
 			opcode = 6;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Dois Operandos
 			// Lendo operando 1	 da instrução.
@@ -375,7 +347,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			
 			codigo = codigoDoisOperandos(op1, op2);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Muda op2 para hexa caso imediato.
 			if (op2 == 10) {
@@ -392,18 +364,15 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operandos na saida.
-			fputc(op1, saida);
-			fputc(op2, saida);
-
-			printf("Operando 1: %d \n", op1);
-			printf("Operando 2: %d \n", op2);
+			fwrite(&op1, 2, 1, saida);
+			fwrite(&op2, 2, 1, saida);
 		}
 		if (strcmp(token, "NOT") == 0) {
 			// Um operando.
 			printf("%s\n",token);
 			opcode = 7;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -411,7 +380,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Busca endereço do op1 caso seja simbolo.
 			if (op1 == 11) {
@@ -419,16 +388,12 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "OR") == 0) {
-			// Dois operandos.
-			printf("%s\n",token);
 			opcode = 8;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Dois Operandos
 			// Lendo operando 1	 da instrução.
@@ -449,7 +414,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			
 			codigo = codigoDoisOperandos(op1, op2);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Muda op2 para hexa caso imediato.
 			if (op2 == 10) {
@@ -466,18 +431,13 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operandos na saida.
-			fputc(op1, saida);
-			fputc(op2, saida);
-
-			printf("Operando 1: %d \n", op1);
-			printf("Operando 2: %d \n", op2);
+			fwrite(&op1, 2, 1, saida);
+			fwrite(&op2, 2, 1, saida);
 		}
 		if (strcmp(token, "CMP") == 0) {
-			// Dois operandos.
-			printf("%s\n",token);
 			opcode = 9;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Dois Operandos
 			// Lendo operando 1	 da instrução.
@@ -498,7 +458,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			
 			codigo = codigoDoisOperandos(op1, op2);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Muda op2 para hexa caso imediato.
 			if (op2 == 10) {
@@ -515,18 +475,13 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operandos na saida.
-			fputc(op1, saida);
-			fputc(op2, saida);
-
-			printf("Operando 1: %d \n", op1);
-			printf("Operando 2: %d \n", op2);
+			fwrite(&op1, 2, 1, saida);
+			fwrite(&op2, 2, 1, saida);
 		}
 		if (strcmp(token, "JMP") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 10;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -534,21 +489,17 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			op1 = buscaSimbolo(tabela, token);
 			
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "JZ") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 11;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -556,21 +507,17 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			op1 = buscaSimbolo(tabela, token);	
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "JS") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 12;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -578,21 +525,17 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			op1 = buscaSimbolo(tabela, token);
 			
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "CALL") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 13;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -600,28 +543,26 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			op1 = buscaSimbolo(tabela, token);
 			
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "RET") == 0) {
-			// Nenhum operando.
-			printf("%s\n",token);
 			opcode = 14;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
+
+			codigo = 0;
+			// Escreve opcode da instrução.
+			fwrite(&codigo, 1, 1, saida);
 		}
 		if (strcmp(token, "PUSH") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 15;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -629,7 +570,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Busca endereço do op1 caso seja simbolo.
 			if (op1 == 11) {
@@ -637,16 +578,12 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "POP") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 16;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -654,7 +591,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Busca endereço do op1 caso seja simbolo.
 			if (op1 == 11) {
@@ -662,23 +599,21 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "DUMP") == 0) {
-			// Nenhum operando.
-			printf("%s\n",token);
 			opcode = 17;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
+
+			codigo = 0;
+			// Escreve opcode da instrução.
+			fwrite(&codigo, 1, 1, saida);
 		}
 		if (strcmp(token, "READ") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 18;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -686,7 +621,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Busca endereço do op1 caso seja simbolo.
 			if (op1 == 11) {
@@ -694,16 +629,12 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "WRITE") == 0) {
-			// Um operando.
-			printf("%s\n",token);
 			opcode = 19;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
 
 			// Lendo operando da instrução.
 			token = strtok(NULL, " ,\r\n");
@@ -711,7 +642,7 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
 			codigo = codigoUmOperando(op1);
 			// Escreve codigo no arquivo.
-			fputc(codigo, saida);
+			fwrite(&codigo, 1, 1, saida);
 
 			// Busca endereço do op1 caso seja simbolo.
 			if (op1 == 11) {
@@ -719,16 +650,16 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 			}
 
 			// Escreve operando no arquivo.
-			fputc(op1, saida);
-
-			printf("Operando 1: %d \n", op1);
+			fwrite(&op1, 2, 1, saida);
 		}
 		if (strcmp(token, "HLT") == 0) {
-			// Nenhum operando.
-			printf("%s\n",token);
 			opcode = 20;
 			// Escreve opcode da instrução.
-			fputc(opcode, saida);
+			fwrite(&opcode, 1, 1, saida);
+
+			codigo = 0;
+			// Escreve opcode da instrução.
+			fwrite(&codigo, 1, 1, saida);
 		}
 	}
 }
@@ -737,55 +668,43 @@ void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 static short checaOperando(char *op) {
 
 	if(strcmp(op, "AL") == 0) {
-		printf("Operando[0]: %s \n",op);
 		return 0;
 	} else 
 	if(strcmp(op, "AH") == 0) {
-		printf("Operando[1]: %s \n",op);
 		return 1;
 	} else
 	if(strcmp(op, "AX") == 0) {
-		printf("Operando[2]: %s \n",op);
 		return 2;
 	} else
 	if(strcmp(op, "BH") == 0) {
-		printf("Operando[3]: %s \n",op);
 		return 3;
 	} else
 	if(strcmp(op, "BL") == 0) {
-		printf("Operando[4]: %s \n",op);
 		return 4;
 	} else
 	if(strcmp(op, "BX") == 0) {
-		printf("Operando[5]: %s \n",op);
 		return 5;
 	} else
 	if(strcmp(op, "CL") == 0) {
-		printf("Operando[6]: %s \n",op);
 		return 6;
 	} else
 	if(strcmp(op, "CH") == 0) {
-		printf("Operando[7]: %s \n",op);
 		return 7;
 	} else
 	if(strcmp(op, "CX") == 0) {
-		printf("Operando[8]: %s \n",op);
 		return 8;
 	} else
+	// Label
 	if(op[0] == '_') {
-		printf("Operando label: %s \n",op);
 		return 9;
 	} else
+	// Imediato!
 	if(op[0] == '0' && op[1] == 'x') {
-		printf("Operando imediato: %s \n",op);
 		return 10;
 	} else {
-		printf("Variavel declarada: %s \n",op);
+		// Nome de uma variavel
 		return 11;
 	}
-
-	//printf("ERRO: operando invalido!\n");
-	//return -1;
 }
 
 // Retorna qual o codigo quando isntrução usa 1 operando.
@@ -878,27 +797,22 @@ static short codigoDoisOperandos(unsigned short op1, unsigned short op2) {
 	
 	// Registrador e memoria
 	if (tipo1 == 0 && tipo2 == 1) {
-		printf("Registrador e memoria!\n");
 		return 3;
 	}
 	// Memoria e registrador.
 	if (tipo1 == 1 && tipo2 == 0) {
-		printf("Memoria e registrador!\n");
 		return 4;
 	}
 	//Registrador e registrador.
 	if (tipo1 == 0 && tipo2 == 0) {
-		printf("Registrador e registrador!\n");
 		return 5;
 	}
 	//Memoria e imediato.
 	if (tipo1 == 1 && tipo2 == 2) {
-		printf("Memoria e imediato!\n");
 		return 6;
 	}
 	// Registrador e imediato.
 	if (tipo1 == 0 && tipo2 == 2) {
-		printf("Registrador e imediato!\n");
 		return 7;
 	}
 }
