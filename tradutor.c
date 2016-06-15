@@ -675,6 +675,7 @@ static short codigoUmOperando(unsigned short op1) {
 			break;
 		// Memoria.
 		case 9:
+		case 11:
 			return 2;
 			break;
 		// Imediato.
@@ -708,6 +709,7 @@ static short codigoDoisOperandos(unsigned short op1, unsigned short op2) {
 			tipo1 = 0;
 			break;
 		case 9:
+		case 11:
 			tipo1 = 1;
 			break;
 		case 10:
@@ -733,6 +735,7 @@ static short codigoDoisOperandos(unsigned short op1, unsigned short op2) {
 			tipo2 = 0;
 			break;
 		case 9:
+		case 11:
 			tipo2 = 1;
 			break;
 		case 10:
