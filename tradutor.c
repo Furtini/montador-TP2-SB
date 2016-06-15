@@ -116,18 +116,20 @@ void primeiraPassagem(FILE *entrada,  TabelaSimbolo *tabela) {
 // Faz a segunda passagem no arquivo de entrada.
 void segundaPassagem(FILE *entrada, FILE *saida,  TabelaSimbolo *tabela) {
 
-	unsigned int temp;
-	
-	int8_t opcode, codigo; // Devem ser 1 byte cada.
 	
 	unsigned short ipInicial = 0;
-	unsigned short op1, op2; 	   // Devem ser 2 byte cada.
+	int8_t opcode, codigo; 			// Devem ser 1 byte cada.
+	unsigned short op1, op2; 	    // Devem ser 2 byte cada.
+	
+	// Auxiliares
 	unsigned short aux1, aux2;
+	unsigned int temp;
+
 
 	char *buffer = NULL;
 	char *token;
-
 	size_t tam = 0;
+
 
 	// Escreve inicio do IP.
 	fwrite(&ipInicial, 2, 1, saida);
