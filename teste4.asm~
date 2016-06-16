@@ -1,4 +1,5 @@
 DW v1 ;variavel 1
+DW v2 ;variavel 2
 READ AX ;leitura de uma variavel do usuario
 READ BX ;leitura de outra variavel
 MOV v1, AX ;copia o numero lido para v1
@@ -7,16 +8,17 @@ _adicao: MOV AX, 0x0 ;zera AX
 MOV BX, 0x4 ;zera BX
 ADD AX, 0x14 ;soma 20 a AX
 DIV BX ;divide AX por 4
-MOV v1, AX ;move para v1 o novo AX (4 supostamente)
-WRITE v1 ;escreve v1
+MOV v2, AX ;move para v1 o novo AX (4 supostamente)
+WRITE v2 ;escreve v2
 JMP _exit ;pula pra saida
 _multiplicacoes: MUL BX ;dobra valor de AX
 WRITE AX
 MOV v1, AX ;atualiza v1 com o valor novo
 SUB v1, 0x5 ;v1 = v1 - 5
 MOV CX, v1 ;copia v1 em CX
-CMP v1, CX ;compara v1 e v2
+CMP v1, CX ;compara v1 e CX
 JZ _adicao ;move para adicao caso v1 e CX sejam iguais 
 _exit: WRITE v1
+WRITE v2
 DUMP
 HLT
